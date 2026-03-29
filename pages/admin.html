@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKS - Administration</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>👑 Administration DKS</h1>
+        <p>Gestion des stocks et prix</p>
+        <hr>
+
+        <div style="background: #fff3e0; padding: 15px; border-radius: 12px; text-align: left; border: 1px solid #ffe0b2;">
+            <h3 style="margin-top:0; color: #e65100;">Ajouter un accessoire</h3>
+            <input type="text" id="new-nom" placeholder="Nom de l'article" style="width:96%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc;">
+            
+            <div style="display: flex; gap: 10px; margin-bottom:10px;">
+                <input type="number" id="new-stock" placeholder="Quantité" style="width:48%; padding:10px; border-radius:5px; border:1px solid #ccc;">
+                <input type="text" id="new-prix" placeholder="Prix (ex: 15$)" style="width:48%; padding:10px; border-radius:5px; border:1px solid #ccc;">
+            </div>
+            
+            <button onclick="ajouterArticle()" class="btn-admin" style="width:100%; padding:12px; background:#e65100; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                💾 Enregistrer l'article
+            </button>
+        </div>
+
+        <div id="admin-inventory" style="margin-top: 25px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            </div>
+
+        <div style="margin-top: 30px; background: #e3f2fd; padding: 15px; border-radius: 12px; border: 1px solid #bbdefb;">
+            <h3 style="margin-top:0; color: #1565c0;">📊 Historique des Ventes</h3>
+            <div id="historique-ventes" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px; font-size: 0.9em;">
+                </div>
+            <button onclick="effacerHistorique()" style="background:#757575; color:white; margin-top:15px; padding:8px; border:none; border-radius:5px; width:100%; cursor:pointer; font-size: 0.8em;">
+                🗑️ Effacer l'historique
+            </button>
+        </div>
+
+        <br>
+        <button onclick="window.location.href='../index.html'" style="background: none; border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            ⬅️ Retour au menu
+        </button>
+    </div>
+
+    <script src="../main.js"></script>
+</body>
+</html>

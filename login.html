@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKS - Connexion Staff</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles spécifiques pour cette page de login */
+        .login-card {
+            background: #e2e8f0; /* Gris clair comme sur l'image */
+            padding: 40px 20px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .logo-box {
+            background: #1a202c;
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .login-card h2 { color: #1a202c; font-size: 1.8rem; margin-bottom: 5px; }
+        .login-card p { color: #718096; margin-bottom: 30px; }
+
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; color: #4a5568; margin-bottom: 8px; font-weight: bold; }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .btn-login {
+            background: #1a202c; /* Noir/Bleu foncé */
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(to bottom, #1a202c, #2d3748); margin: 0; display: flex; align-items: center; min-height: 100vh;">
+
+    <div class="login-card">
+        <div class="logo-box">👑</div>
+        <h2>Espace Staff</h2>
+        <p>Connectez-vous à votre tableau de bord</p>
+
+        <div class="input-group">
+            <label>Identifiant Staff</label>
+            <input type="text" id="staff-id" placeholder="Ex: vendeur01">
+        </div>
+
+        <div class="input-group">
+            <label>Mot de passe</label>
+            <input type="password" id="staff-pass" placeholder="••••••••">
+        </div>
+
+        <button onclick="verifierConnexion()" class="btn-login">
+            <span>🔒</span> Se connecter
+        </button>
+        <button onclick="connecterAvecPi()" style="background: #623686; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+    <img src="https://minepi.com/wp-content/uploads/2021/10/pi-logo-white.png" width="20" alt="Pi">
+    Se connecter avec Pi
+</button>
+
+        
+        <p style="margin-top: 20px; font-size: 0.8rem;">
+            <a href="index.html" style="color: #4a5568; text-decoration: none;">← Retour à la boutique</a>
+        </p>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

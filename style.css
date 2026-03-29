@@ -1,0 +1,259 @@
+/* Styles globaux pour Double King */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Barre de navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: transparent;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.dot { color: #f6ad55; }
+
+/* Section Hero (Le texte principal) */
+.hero {
+    text-align: center;
+    padding: 60px 25px;
+    flex-grow: 1;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: #f6ad55; /* Le jaune "portée" */
+}
+
+.hero p {
+    font-size: 1rem;
+    color: #a0aec0;
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto 30px;
+}
+
+/* Barre de recherche style Premium */
+.search-container {
+    background: white;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-container input {
+    border: none;
+    padding: 15px 20px;
+    flex: 1;
+    border-radius: 50px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.search-btn {
+    background: #f6ad55;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    color: #1a202c;
+    cursor: pointer;
+}
+
+/* Boutons de rôles (Admin, Caissier, Vendeur) */
+.roles-access {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding-bottom: 50px;
+    overflow-x: auto; /* Pour faire défiler sur mobile si besoin */
+}
+
+.role-chip {
+    background: #1a202c;
+    border: 1px solid #4a5568;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.role-chip:hover {
+    border-color: #f6ad55;
+    background: #2d3748;
+}
+
+/* Pour le container global */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+}
+.products-section { padding: 20px; }
+
+.category-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.filter-chip {
+    background: white;
+    color: #1a202c;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.filter-chip.active { background: #1a202c; color: white; }
+
+.products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes comme sur les sites pro */
+    gap: 15px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    color: #1a202c;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.product-card h4 { margin: 10px 0 5px; font-size: 0.9rem; }
+.product-card .price { font-weight: bold; color: #f6ad55; font-size: 1.1rem; }
+.product-card .stock { font-size: 0.7rem; color: #718096; }
+.add-to-cart-btn {
+    background-color: #f6ad55; /* Ton orange de référence */
+    color: #1a202c;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #ed8936;
+}
+/* Style du badge sur le panier */
+.badge {
+    position: absolute;
+    top: -8px; /* Ajuste selon ton icône */
+    right: -8px;
+    background-color: #e53e3e; /* Rouge d'alerte */
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%; /* Pour qu'il soit rond */
+    padding: 2px 6px;
+    display: none; /* Câché par défaut (si 0 article) */
+    align-items: center;
+    justify-content: center;
+}
+/* Fond noir transparent derrière la fenêtre */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    justify-content: center; align-items: center;
+}
+
+/* La boîte blanche (ou sombre) du panier */
+.modal-content {
+    background-color: #1a202c; /* Sombre comme ton thème */
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #2d3748;
+}
+
+.close-btn {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.checkout-btn {
+    background: #f6ad55;
+    color: #1a202c;
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
+}
+/* L'animation elle-même */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* On l'applique à chaque carte de produit */
+.product-card {
+    animation: fadeInUp 0.4s ease forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Petit effet de survol pour faire "vivant" */
+.product-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}

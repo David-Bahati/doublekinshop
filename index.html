@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double King - Boutique</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">👑</span>
+            <span class="logo-text">Double King<span class="dot">.</span></span>
+        </div>
+        <div class="nav-icons">
+  <div class="nav-icons" style="display: flex; gap: 15px; align-items: center;">
+    <div onclick="ouvrirPanier()" style="position: relative; cursor: pointer;">
+        <span class="icon">🛒</span>
+        <span id="cart-count-badge" class="badge">0</span>
+    </div>
+    
+    <span class="icon" style="cursor: pointer;">☰</span>
+</div>
+
+
+    </nav>
+
+    <section class="hero">
+        <h1>L'élégance à votre <br><span class="highlight">portée.</span></h1>
+        <p>Découvrez notre sélection exclusive de produits premium. Qualité garantie, livraison rapide.</p>
+        
+        <div class="search-container">
+    <input type="text" id="search-input" placeholder="Rechercher un produit" oninput="filtrerProduits()">
+    <button class="search-btn" onclick="filtrerProduits()">Chercher</button>
+</div>
+
+        <section class="products-section">
+    <div class="category-filters">
+    <button class="filter-chip active" onclick="filtrerParCategorie('Tout')">Tout voir</button>
+    <button class="filter-chip" onclick="filtrerParCategorie('Accessoires')">🖱️ Accessoires</button>
+    <button class="filter-chip" onclick="filtrerParCategorie('Câbles')">🔌 Câbles</button>
+</div>
+
+
+    <div id="home-products-grid" class="products-grid">
+        </div>
+</section>
+
+    </section>
+
+    <div id="staff-section" style="text-align: center; padding-bottom: 50px;">
+    <button onclick="window.location.href='login.html'" class="role-chip" style="background: #f6ad55; color: #1a202c; font-weight: bold; border: none; padding: 15px 40px;">
+    🔐 Staff Login
+</button>
+
+
+    <div id="staff-roles" style="display: none; gap: 10px; justify-content: center; margin-top: 20px;">
+        <button onclick="ouvrirAdmin()" class="role-chip">👑 Admin</button>
+        <button onclick="window.location.href='pages/caissier.html'" class="role-chip">💰 Caissier</button>
+        <button onclick="window.location.href='pages/vendeur.html'" class="role-chip">📱 Vendeur</button>
+    </div>
+</div>
+
+
+    <script src="main.js"></script>
+    
+    <div id="cart-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="fermerPanier()">&times;</span>
+        <h2>Mon Panier 🛒</h2>
+        <div id="cart-items-list">
+            </div>
+        <hr>
+        <div class="cart-total">
+            <strong>Total : <span id="cart-total-price">0</span> Pi</strong>
+        </div>
+        <button class="checkout-btn" onclick="payerEnPi()" style="background: #623686; color: white;">
+    💎 Payer avec Pi Wallet
+</button>
+
+    </div>
+    
+</div>
+<div id="receipt-modal" class="modal" style="display: none; background-color: rgba(26, 32, 44, 0.95);">
+    <div class="modal-content receipt-card" style="background: #ffffff; color: #1a202c; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(98, 54, 134, 0.3); border: 3px solid #623686; max-width: 380px;">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://minepi.com/wp-content/uploads/2021/10/pi-logo-white.png" width="40" style="background: #623686; padding: 8px; border-radius: 50%;" alt="Pi Logo">
+            <h2 style="color: #623686; margin-top: 10px; font-weight: 800;">DOUBLE KING x PI</h2>
+            <p style="font-size: 12px; color: #718096; text-transform: uppercase; letter-spacing: 1px;">Reçu de Transaction Officiel</p>
+        </div>
+
+        <div style="border-top: 2px dashed #e2e8f0; border-bottom: 2px dashed #e2e8f0; padding: 15px 0; font-family: 'Courier New', monospace; font-size: 14px;">
+            <p style="text-align: center; margin-bottom: 10px; font-style: italic; color: #4a5568;">"Ensemble, nous construisons l'avenir du Pi Network !"</p>
+            
+            <div id="receipt-details">
+                </div>
+        </div>
+
+        <div style="background: #f3f0f7; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; border: 1px solid #dcd1e8;">
+            <p style="color: #623686; font-weight: bold; font-size: 14px; margin-bottom: 5px;">⚡ Pionnier, votre transaction compte !</p>
+            <p style="font-size: 12px; color: #4a5568; line-height: 1.4;">Merci de soutenir l'écosystème Double King. Chaque achat en Pi renforce la valeur de notre crypto-monnaie commune. Continuez à miner et à bâtir !</p>
+        </div>
+
+        <div style="margin-top: 15px; text-align: center;">
+            <p style="font-size: 11px; color: #718096; margin-bottom: 5px;">ID DE TRANSACTION (TXID) :</p>
+            <p id="receipt-txid" style="font-size: 10px; font-family: monospace; word-break: break-all; color: #623686; background: #f3f0f7; padding: 8px; border-radius: 8px;"></p>
+        </div>
+<button onclick="partagerSurPiChat()" style="background: #ffffff; color: #623686; border: 2px solid #623686; padding: 10px; border-radius: 12px; width: 100%; font-weight: bold; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+    💬 Partager sur Pi Chat
+</button>
+
+        <button class="checkout-btn" onclick="document.getElementById('receipt-modal').style.display='none'" style="background: #623686; color: white; margin-top: 20px; border-radius: 12px; font-weight: bold;">
+            🎉 Terminer & Retourner à la Boutique
+        </button>
+        
+        <p style="font-size: 10px; margin-top: 10px; color: #a0aec0; text-align: center;">Une capture d'écran est recommandée pour vos archives.</p>
+    </div>
+</div>
+
+
+</body>
+</html>
