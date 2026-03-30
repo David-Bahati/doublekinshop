@@ -587,6 +587,32 @@ function partagerSurPiChat() {
     // Le SDK Pi permet d'ouvrir le chat ou de partager du contenu
     Pi.openShareDialog("Achat réussi !", message);
 }
+function ouvrirMenu() {
+    console.log("Ouverture du menu...");
+    document.getElementById('side-menu').style.left = "0";
+}
+
+function fermerMenu() {
+    console.log("Fermeture du menu...");
+    document.getElementById('side-menu').style.left = "-250px";
+}
+function chargerTousLesProduits() {
+    // Tes produits par défaut
+    const produitsParDefaut = [
+        { id: 1, nom: "Clavier", prix: 25, image: "images/clavier.png" },
+        // ... tes autres produits générés ...
+    ];
+
+    // Récupérer les produits ajoutés par l'admin
+    const produitsAdmin = JSON.parse(localStorage.getItem('mesProduits')) || [];
+
+    // Fusionner les deux listes
+    const catalogueComplet = [...produitsParDefaut, ...produitsAdmin];
+
+    // Utilise maintenant 'catalogueComplet' pour afficher tes cartes sur l'accueil
+    afficherProduits(catalogueComplet);
+}
+
 
 
 

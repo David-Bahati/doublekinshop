@@ -43,6 +43,23 @@
             ⬅️ Retour au menu
         </button>
     </div>
+    <div style="margin: 20px; background: #1a1a2e; padding: 15px; border-radius: 10px; color: white;">
+    <h3 style="border-bottom: 1px solid #444; padding-bottom: 10px;">📦 Inventaire & Gestion</h3>
+    
+    <div id="liste-admin-produits" style="margin-top: 15px;">
+        </div>
+</div>
+
+  <div style="padding: 20px; background: #1a1a2e; color: white; border-radius: 10px; margin: 10px;">
+    <h3>Ajouter un Nouveau Produit</h3>
+    <input type="text" id="nom-prod" placeholder="Nom du produit" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none;">
+    <input type="number" id="prix-prod" placeholder="Prix en Pi" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none;">
+    <input type="text" id="img-prod" placeholder="Lien de l'image (ex: images/souris.png)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none;">
+    <button onclick="publierProduit()" style="background: #ffa500; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold;">Publier sur l'Accueil</button>
+</div>
+
+
+<script src="admin.js"></script>
 
     <script src="../main.js"></script>
 </body>

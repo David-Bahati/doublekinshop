@@ -6,3 +6,16 @@ function choisirProfil(role) {
     // Pour l'instant, on redirigera vers le dossier correspondant (qui est vide)
     window.location.href = role + "/index.html"; 
 }
+const btnMenu = document.getElementById('btn-menu');
+const btnClose = document.getElementById('btn-close');
+const sideMenu = document.getElementById('side-menu');
+
+// Ouvrir le menu
+btnMenu.addEventListener('click', () => {
+    sideMenu.classList.add('ouvert');
+});
+
+// Fermer le menu
+btnClose.addEventListener('click', () => {
+    sideMenu.classList.remove('ouvert');
+});

@@ -22,15 +22,21 @@
         <span id="cart-count-badge" class="badge">0</span>
     </div>
     
-    <span class="icon" style="cursor: pointer;">☰</span>
-</div>
+  <span class="icon" style="cursor: pointer; font-size: 30px;" onclick="ouvrirMenu()">☰</span>
+
+
+
+
 
 
     </nav>
 
-    <section class="hero">
-        <h1>L'élégance à votre <br><span class="highlight">portée.</span></h1>
-        <p>Découvrez notre sélection exclusive de produits premium. Qualité garantie, livraison rapide.</p>
+        <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 30px 20px; text-align: center; border-radius: 15px; margin: 15px; border-left: 5px solid #ffa500;">
+    <h2 style="color: white; margin: 0;">Bienvenue chez Double King</h2>
+    <p style="color: #ffa500; font-size: 14px; margin-top: 10px;">Le meilleur de l'informatique à Bunia, payable en Pi ⚡</p>
+</div>
+
+        
         
         <div class="search-container">
     <input type="text" id="search-input" placeholder="Rechercher un produit" oninput="filtrerProduits()">
@@ -51,11 +57,41 @@
 
     </section>
 
-    <div id="staff-section" style="text-align: center; padding-bottom: 50px;">
-    <button onclick="window.location.href='login.html'" class="role-chip" style="background: #f6ad55; color: #1a202c; font-weight: bold; border: none; padding: 15px 40px;">
-    🔐 Staff Login
-</button>
 
+<div id="side-menu" class="menu-lateral" style="position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #1a1a2e; transition: 0.4s; z-index: 9999;">
+    <div style="padding: 20px; text-align: right;">
+        <span onclick="fermerMenu()" style="cursor: pointer; font-size: 30px; color: white;">×</span>
+    </div>
+<nav style="display: flex; flex-direction: column; padding: 20px;">
+    
+    <a href="index.html" onclick="fermerMenu()" style="color: white; margin-bottom: 20px; text-decoration: none; font-size: 16px; display: flex; align-items: center; gap: 12px;">
+        🏠 <span>Accueil</span>
+    </a>
+
+    <a href="#" onclick="ouvrirPanier(); fermerMenu();" style="color: white; margin-bottom: 20px; text-decoration: none; font-size: 16px; display: flex; align-items: center; gap: 12px;">
+        🛒 <span>Mon Panier</span>
+    </a>
+
+    <a href="https://bienvenuechezdou2845.pinet.com" target="_blank" onclick="fermerMenu()" style="color: white; margin-bottom: 20px; text-decoration: none; font-size: 16px; display: flex; align-items: center; gap: 12px;">
+        🤖 <span>Assistant IA</span>
+    </a>
+
+    <a href="login.html" onclick="fermerMenu()" style="color: white; margin-bottom: 20px; text-decoration: none; font-size: 16px; display: flex; align-items: center; gap: 12px; opacity: 0.7;">
+        🔐 <span>Espace Staff</span>
+    </a>
+
+    <hr style="border: 0; border-top: 1px solid #2a2a4e; margin: 10px 0 25px 0; width: 100%;">
+
+    <a href="https://wa.me/243823828515" target="_blank" onclick="fermerMenu()" style="background-color: #25D366; color: white !important; padding: 12px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+</nav>
+
+
+ 
+
+
+</div>
 
     <div id="staff-roles" style="display: none; gap: 10px; justify-content: center; margin-top: 20px;">
         <button onclick="ouvrirAdmin()" class="role-chip">👑 Admin</button>
@@ -120,6 +156,25 @@
         <p style="font-size: 10px; margin-top: 10px; color: #a0aec0; text-align: center;">Une capture d'écran est recommandée pour vos archives.</p>
     </div>
 </div>
+<script src="main.js"></script>
+<footer style="background-color: #1a1a2e; color: white; padding: 30px 20px; text-align: center; border-top: 2px solid #ffa500; margin-top: 40px;">
+    
+    <h3 style="color: #ffa500; margin-bottom: 10px;">Double King Shop</h3>
+    <p style="font-size: 0.9em; color: #ccc; margin-bottom: 20px;">Votre expert en accessoires informatiques à Bunia.</p>
+
+    <div style="margin-bottom: 25px;">
+        <p style="margin: 5px 0;">📍 Quartier Lumumba, Bunia (RDC)</p>
+        <p style="margin: 5px 0;">📞 +243 823 038 945</p>
+    </div>
+
+    <div style="background: rgba(255, 165, 0, 0.1); padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
+        <span style="color: #ffa500; font-weight: bold;">⚡ Paiement via Pi Network ⚡</span>
+    </div>
+
+    <div style="border-top: 1px solid #2a2a4e; padding-top: 15px; font-size: 0.8em; color: #777;">
+        <p>© 2026 Double King Shop. Tous droits réservés.</p>
+    </div>
+</footer>
 
 
 </body>
