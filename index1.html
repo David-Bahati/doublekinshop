@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System - Double King Shop</title>
+    
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;        }
+
+        .login-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .demo-accounts {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .demo-accounts h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .demo-account {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .demo-account strong {
+            color: #667eea;
+        }
+
+        .staff-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .staff-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .staff-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-header h2 {
+            color: #667eea;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-role {
+            background: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-header h3 {
+            color: #333;
+        }
+
+        .btn-add {
+            padding: 0.6rem 1.2rem;
+            background: #2ed573;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        table {            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-edit {
+            background: #ffa502;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-view {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #333;
+        }
+
+        .close-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        /* Receipt */
+        .receipt {
+            background: #fff;
+            padding: 2rem;
+            border: 2px dashed #333;
+            max-width: 400px;
+            margin: 2rem auto;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid #333;            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .receipt-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-top: 2px solid #333;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dashed #333;
+            color: #666;
+        }
+
+        .btn-print {
+            width: 100%;
+            padding: 0.8rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .payment-option {            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover,
+        .payment-option.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .payment-option i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 2000;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            border-left: 4px solid #2ed573;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ff4757;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); }
+            to { transform: translateX(0); }
+        }
+        /* Exchange Rate */
+        .exchange-rate {
+            background: #fff3cd;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-edit-rate {
+            padding: 0.4rem 0.8rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            table th,
+            table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>👑 Double King POS</h1>
+                <p>Gestion Commerciale</p>            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Nom d'utilisateur</label>
+                    <input type="text" id="username" required placeholder="Entrez votre username">
+                </div>
+                
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="password" required placeholder="Entrez votre mot de passe">
+                </div>
+                
+                <button type="submit" class="btn-login">🔐 Se connecter</button>
+            </form>
+            
+            <div class="demo-accounts">
+                <h3>📋 Comptes de démonstration</h3>
+                <div class="demo-account">
+                    <strong>ADMIN:</strong> admin / admin123
+                </div>
+                <div class="demo-account">
+                    <strong>VENDEUR:</strong> vendeur / vendeur123
+                </div>
+                <div class="demo-account">
+                    <strong>CAISSIER:</strong> caissier / caissier123
+                </div>
+            </div>
+            
+            <div class="staff-link">
+                <a href="accueil1.html">🛒 Espace Client (Accueil)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <h2>👑 Double King POS</h2>
+            <div class="user-info">
+                <span id="displayUsername"></span>
+                <span class="user-role" id="displayRole"></span>
+                <button class="btn-logout" onclick="handleLogout()">🚪 Déconnexion</button>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Exchange Rate -->
+            <div class="exchange-rate">
+                <span>💱 Taux de change actuel : <strong id="exchangeRate">1 USD = 2 500 CDF</strong></span>                <button class="btn-edit-rate" onclick="openModal('exchangeModal')">✏️ Modifier</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>📊 Revenus Totaux</h3>
+                    <div class="value" id="totalRevenue">0 CDF</div>
+                </div>
+                <div class="stat-card">
+                    <h3>💰 Ventes Totales</h3>
+                    <div class="value" id="totalSales">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>📦 Produits</h3>
+                    <div class="value" id="totalProducts">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>👥 Utilisateurs</h3>
+                    <div class="value" id="totalUsers">0</div>
+                </div>
+            </div>
+
+            <!-- Admin Section -->
+            <div class="section" id="adminSection" style="display: none;">
+                <div class="section-header">
+                    <h3>📦 Gestion des Produits</h3>
+                    <button class="btn-add" onclick="openModal('productModal')">+ Nouveau Produit</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prix (CDF)</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+
+            <div class="section" id="adminUsersSection" style="display: none;">
+                <div class="section-header">
+                    <h3>👥 Gestion des Utilisateurs</h3>
+                    <button class="btn-add" onclick="openModal('userModal')">+ Nouvel Utilisateur</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>                            <th>Nom</th>
+                            <th>Username</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Cashier/Vendor Section -->
+            <div class="section" id="salesSection">
+                <div class="section-header">
+                    <h3>💳 Nouvelle Vente</h3>
+                    <button class="btn-add" onclick="openModal('saleModal')">+ Nouvelle Vente</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Montant</th>
+                            <th>Paiement</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Vendor Section -->
+            <div class="section" id="vendorSection" style="display: none;">
+                <div class="section-header">
+                    <h3>📈 Mes Ventes</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produit</th>
+                            <th>Montant</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vendorSalesTable"></tbody>
+                </table>
+            </div>
+        </div>    </div>
+
+    <!-- Modals -->
+    <!-- Exchange Rate Modal -->
+    <div class="modal" id="exchangeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Modifier Taux de Change</h3>
+                <button class="close-btn" onclick="closeModal('exchangeModal')">×</button>
+            </div>
+            <form onsubmit="updateExchangeRate(event)">
+                <div class="form-group">
+                    <label>1 USD = ? CDF</label>
+                    <input type="number" id="newExchangeRate" value="2500" required>
+                </div>
+                <button type="submit" class="btn-login">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📦 Nouveau Produit</h3>
+                <button class="close-btn" onclick="closeModal('productModal')">×</button>
+            </div>
+            <form onsubmit="addProduct(event)">
+                <div class="form-group">
+                    <label>Nom du produit</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Prix (CDF)</label>
+                    <input type="number" id="productPrice" required>
+                </div>
+                <div class="form-group">
+                    <label>Stock initial</label>
+                    <input type="number" id="productStock" required>
+                </div>
+                <button type="submit" class="btn-login">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>👥 Nouvel Utilisateur</h3>                <button class="close-btn" onclick="closeModal('userModal')">×</button>
+            </div>
+            <form onsubmit="addUser(event)">
+                <div class="form-group">
+                    <label>Nom complet</label>
+                    <input type="text" id="userFullName" required>
+                </div>
+                <div class="form-group">
+                    <label>Nom d'utilisateur</label>
+                    <input type="text" id="userUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="userPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Rôle</label>
+                    <select id="userRole" required>
+                        <option value="vendeur">Vendeur</option>
+                        <option value="caissier">Caissier</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-login">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sale Modal -->
+    <div class="modal" id="saleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💳 Nouvelle Vente</h3>
+                <button class="close-btn" onclick="closeModal('saleModal')">×</button>
+            </div>
+            <form onsubmit="addSale(event)">
+                <div class="form-group">
+                    <label>Produit</label>
+                    <select id="saleProduct" required onchange="updateSaleTotal()">
+                        <option value="">Sélectionner un produit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantité</label>
+                    <input type="number" id="saleQuantity" value="1" min="1" required onchange="updateSaleTotal()">
+                </div>
+                <div class="form-group">
+                    <label>Total (CDF)</label>
+                    <input type="text" id="saleTotal" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mode de paiement</label>
+                    <div class="payment-methods">
+                        <div class="payment-option" onclick="selectPayment('cash', this)">
+                            <i>💵</i>
+                            <span>Cash</span>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('pi', this)">
+                            <i></i>
+                            <span>Pi Network</span>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('mobicash', this)">
+                            <i>📱</i>
+                            <span>Mobicash</span>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('orange', this)">
+                            <i>🟠</i>
+                            <span>Orange Money</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="paymentMethod" required>
+                </div>
+
+                <div class="form-group" id="piPaymentSection" style="display: none;">
+                    <label>Montant en Pi</label>
+                    <input type="text" id="piAmount" readonly>
+                    <small id="piNote" style="color: #666;"></small>
+                </div>
+                
+                <button type="submit" class="btn-login">✅ Valider la vente</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🧾 Reçu de Paiement</h3>
+                <button class="close-btn" onclick="closeModal('receiptModal')">×</button>
+            </div>
+            <div class="receipt" id="receiptContent">
+                <!-- Receipt will be generated here -->
+            </div>
+            <button class="btn-print" onclick="printReceipt()">🖨️ Imprimer le reçu</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ==================== DATA STORAGE ====================
+        let exchangeRate = 2500;
+        let products = JSON.parse(localStorage.getItem('dk_products')) || [
+            { id: 1, name: 'Souris Sans Fil', price: 25000, stock: 12 },
+            { id: 2, name: 'Clavier AZERTY', price: 65000, stock: 8 },
+            { id: 3, name: 'Câble USB-C 2m', price: 12500, stock: 20 },
+            { id: 4, name: 'Casque Gaming', price: 87500, stock: 5 },
+            { id: 5, name: 'Webcam HD', price: 75000, stock: 7 }
+        ];
+        
+        let users = JSON.parse(localStorage.getItem('dk_users')) || [
+            { id: 1, name: 'Administrateur', username: 'admin', password: 'admin123', role: 'admin' },
+            { id: 2, name: 'Vendeur Demo', username: 'vendeur', password: 'vendeur123', role: 'vendeur' },
+            { id: 3, name: 'Caissier Demo', username: 'caissier', password: 'caissier123', role: 'caissier' }
+        ];
+        
+        let sales = JSON.parse(localStorage.getItem('dk_sales')) || [];
+        let currentUser = null;
+        let selectedPaymentMethod = null;
+
+        // ==================== PI NETWORK ====================
+        let piUser = null;
+        let accessToken = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                Pi.init({ version: "2.0", sandbox: true });
+                console.log('Pi SDK initialisé');
+            } catch (error) {
+                console.log('Pi SDK non disponible (mode local)');
+            }
+            
+            loadFromStorage();
+            checkExistingAuth();
+        });
+
+        function checkExistingAuth() {
+            const savedUser = localStorage.getItem('dk_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        }
+
+        // ==================== AUTHENTICATION ====================
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('dk_current_user', JSON.stringify(user));
+                showDashboard();
+                showNotification('✅ Connexion réussie !', 'success');
+            } else {
+                showNotification('❌ Identifiants incorrects', 'error');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('dk_current_user');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showNotification('✅ Déconnexion réussie', 'success');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            
+            document.getElementById('displayUsername').textContent = currentUser.name;
+            document.getElementById('displayRole').textContent = currentUser.role.toUpperCase();
+            
+            // Show sections based on role
+            document.getElementById('adminSection').style.display = 
+                currentUser.role === 'admin' ? 'block' : 'none';
+            document.getElementById('adminUsersSection').style.display = 
+                currentUser.role === 'admin' ? 'block' : 'none';
+            document.getElementById('vendorSection').style.display = 
+                currentUser.role === 'vendeur' ? 'block' : 'none';
+            
+            updateDashboard();
+        }
+
+        // ==================== DASHBOARD ====================
+        function updateDashboard() {
+            // Update stats
+            const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
+            document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString() + ' CDF';
+            document.getElementById('totalSales').textContent = sales.length;
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalUsers').textContent = users.length;
+            
+            // Update tables
+            updateProductsTable();
+            updateUsersTable();
+            updateSalesTable();
+            updateVendorSalesTable();
+            updateProductSelect();
+        }
+
+        function updateProductsTable() {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>${p.price.toLocaleString()}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        ${currentUser.role === 'admin' ? `
+                            <button class="btn-action btn-edit" onclick="editProduct(${p.id})">✏️</button>
+                            <button class="btn-action btn-delete" onclick="deleteProduct(${p.id})">🗑️</button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateUsersTable() {
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = users.map(u => `
+                <tr>
+                    <td>${u.name}</td>
+                    <td>${u.username}</td>
+                    <td>${u.role}</td>
+                    <td>
+                        ${currentUser.role === 'admin' ? `
+                            <button class="btn-action btn-delete" onclick="deleteUser(${u.id})">🗑️</button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateSalesTable() {
+            const tbody = document.getElementById('salesTable');
+            const filteredSales = currentUser.role === 'vendeur' 
+                ? sales.filter(s => s.seller === currentUser.username)
+                : sales;
+            
+            tbody.innerHTML = filteredSales.slice(-10).reverse().map(s => `
+                <tr>
+                    <td>#${s.id}</td>
+                    <td>${s.product}</td>
+                    <td>${s.quantity}</td>
+                    <td>${s.amount.toLocaleString()} CDF</td>
+                    <td>${s.paymentMethod}</td>
+                    <td>${s.date}</td>
+                    <td>
+                        <button class="btn-action btn-view" onclick="viewReceipt(${s.id})">🧾</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateVendorSalesTable() {
+            const tbody = document.getElementById('vendorSalesTable');
+            const vendorSales = sales.filter(s => s.seller === currentUser.username);
+            
+            tbody.innerHTML = vendorSales.slice(-10).reverse().map(s => `
+                <tr>
+                    <td>#${s.id}</td>
+                    <td>${s.product}</td>
+                    <td>${s.amount.toLocaleString()} CDF</td>
+                    <td>${s.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateProductSelect() {
+            const select = document.getElementById('saleProduct');
+            select.innerHTML = '<option value="">Sélectionner un produit</option>' + 
+                products.map(p => `<option value="${p.id}" data-price="${p.price}">${p.name} - ${p.price.toLocaleString()} CDF</option>`).join('');
+        }
+
+        // ==================== PRODUCTS ====================
+        function addProduct(event) {
+            event.preventDefault();
+            
+            const newProduct = {
+                id: Date.now(),
+                name: document.getElementById('productName').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value)
+            };
+            
+            products.push(newProduct);
+            saveToStorage();
+            closeModal('productModal');
+            updateDashboard();
+            showNotification('✅ Produit ajouté avec succès', 'success');
+            event.target.reset();
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+                products = products.filter(p => p.id !== id);
+                saveToStorage();
+                updateDashboard();
+                showNotification('🗑️ Produit supprimé', 'success');
+            }
+        }
+
+        // ==================== USERS ====================
+        function addUser(event) {
+            event.preventDefault();
+            
+            const newUser = {
+                id: Date.now(),
+                name: document.getElementById('userFullName').value,
+                username: document.getElementById('userUsername').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value
+            };
+            
+            users.push(newUser);
+            saveToStorage();
+            closeModal('userModal');
+            updateDashboard();
+            showNotification('✅ Utilisateur ajouté avec succès', 'success');
+            event.target.reset();
+        }
+
+        function deleteUser(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+                users = users.filter(u => u.id !== id);
+                saveToStorage();
+                updateDashboard();
+                showNotification('🗑️ Utilisateur supprimé', 'success');
+            }
+        }
+
+        // ==================== SALES ====================
+        function updateSaleTotal() {
+            const select = document.getElementById('saleProduct');
+            const quantity = parseInt(document.getElementById('saleQuantity').value) || 1;
+            const option = select.options[select.selectedIndex];
+            const price = option.getAttribute('data-price') || 0;
+            const total = price * quantity;
+            
+            document.getElementById('saleTotal').value = total.toLocaleString() + ' CDF';
+            
+            // Calculate Pi amount
+            const piAmount = (total / exchangeRate).toFixed(2);
+            document.getElementById('piAmount').value = piAmount + ' Pi';
+            document.getElementById('piNote').textContent = `Taux: 1 USD = ${exchangeRate} CDF`;
+        }
+
+        function selectPayment(method, element) {
+            selectedPaymentMethod = method;
+            document.getElementById('paymentMethod').value = method;
+            
+            // Update UI
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            // Show Pi section if Pi selected
+            document.getElementById('piPaymentSection').style.display = 
+                method === 'pi' ? 'block' : 'none';
+        }
+
+        function addSale(event) {
+            event.preventDefault();
+            
+            const productId = document.getElementById('saleProduct').value;
+            if (!productId) {
+                showNotification('❌ Veuillez sélectionner un produit', 'error');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                showNotification('❌ Veuillez sélectionner un mode de paiement', 'error');
+                return;
+            }
+            
+            const product = products.find(p => p.id == productId);
+            const quantity = parseInt(document.getElementById('saleQuantity').value);
+            
+            if (quantity > product.stock) {
+                showNotification('❌ Stock insuffisant', 'error');
+                return;
+            }
+            
+            // Process payment based on method
+            if (selectedPaymentMethod === 'pi') {
+                processPiPayment(product, quantity);
+            } else {
+                completeSale(product, quantity, selectedPaymentMethod);
+            }
+        }
+
+        function processPiPayment(product, quantity) {
+            const total = product.price * quantity;
+            const piAmount = (total / exchangeRate).toFixed(2);
+            
+            if (!piUser || !accessToken) {
+                // Need to authenticate first
+                authenticatePi().then(() => {
+                    createPiPayment(product, quantity, piAmount);
+                });
+            } else {
+                createPiPayment(product, quantity, piAmount);
+            }
+        }
+
+        function authenticatePi() {
+            return new Promise((resolve, reject) => {
+                const scopes = ['payments', 'username'];
+                
+                Pi.authenticate(scopes, onIncompletePaymentFound)
+                    .then(function(auth) {
+                        piUser = auth.user;
+                        accessToken = auth.accessToken;
+                        localStorage.setItem('dk_pi_user', JSON.stringify(piUser));
+                        localStorage.setItem('dk_pi_token', accessToken);
+                        showNotification('✅ Authentifié avec Pi Network', 'success');
+                        resolve();
+                    })
+                    .catch(function(error) {
+                        showNotification('❌ Erreur Pi: ' + error.message, 'error');
+                        reject(error);
+                    });
+            });
+        }
+
+        function checkExistingAuth() {
+            const savedUser = localStorage.getItem('dk_pi_user');
+            const savedToken = localStorage.getItem('dk_pi_token');
+            if (savedUser && savedToken) {
+                piUser = JSON.parse(savedUser);
+                accessToken = savedToken;
+            }
+        }
+
+        function onIncompletePaymentFound(payment) {
+            console.log('Paiement incomplet:', payment);
+        }
+
+        function createPiPayment(product, quantity, piAmount) {
+            const paymentData = {
+                amount: parseFloat(piAmount),
+                memo: `Double King Shop - ${product.name} x${quantity}`,
+                metadata: {
+                    productId: product.id,
+                    productName: product.name,
+                    quantity: quantity,
+                    seller: currentUser.username
+                }
+            };
+            
+            const paymentCallbacks = {
+                onReadyForServerApproval: function(paymentId) {
+                    console.log('Approbation requise:', paymentId);
+                    showNotification('⏳ Paiement en attente...', 'success');
+                },
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    console.log('Paiement complété:', paymentId, txid);
+                    completeSale(product, quantity, 'Pi Network');
+                },
+                onCancel: function(paymentId) {
+                    showNotification('⚠️ Paiement annulé', 'error');
+                },
+                onError: function(error, payment) {
+                    showNotification('❌ Erreur Pi: ' + error.message, 'error');
+                }
+            };
+            
+            Pi.createPayment(paymentData, paymentCallbacks)
+                .then(function(payment) {
+                    console.log('Paiement initié:', payment);
+                })
+                .catch(function(error) {
+                    showNotification('❌ Erreur: ' + error.message, 'error');
+                });
+        }
+
+        function completeSale(product, quantity, paymentMethod) {
+            const amount = product.price * quantity;
+            
+            // Update stock
+            product.stock -= quantity;
+            
+            // Create sale record
+            const sale = {
+                id: Date.now(),
+                product: product.name,
+                productId: product.id,
+                quantity: quantity,
+                amount: amount,
+                paymentMethod: paymentMethod,
+                seller: currentUser.username,
+                date: new Date().toLocaleString('fr-FR')
+            };
+            
+            sales.push(sale);
+            saveToStorage();
+            closeModal('saleModal');
+            updateDashboard();
+            
+            // Generate and show receipt
+            generateReceipt(sale);
+            openModal('receiptModal');
+            
+            showNotification('✅ Vente enregistrée avec succès !', 'success');
+            event.target.reset();
+            selectedPaymentMethod = null;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+        }
+
+        // ==================== RECEIPT ====================
+        function generateReceipt(sale) {
+            const receiptContent = document.getElementById('receiptContent');
+            const usdAmount = (sale.amount / exchangeRate).toFixed(2);
+            
+            receiptContent.innerHTML = `
+                <div class="receipt-header">
+                    <h2>👑 DOUBLE KING SHOP</h2>
+                    <p>Bunia, RDC</p>
+                    <p>Tel: +243 823 038 945</p>
+                </div>
+                <div class="receipt-item">
+                    <span>Reçu #:</span>
+                    <span>${sale.id}</span>
+                </div>
+                <div class="receipt-item">
+                    <span>Date:</span>
+                    <span>${sale.date}</span>
+                </div>
+                <div class="receipt-item">
+                    <span>Caissier:</span>
+                    <span>${sale.seller}</span>
+                </div>
+                <div class="receipt-item">
+                    <span>Produit:</span>
+                    <span>${sale.product} x${sale.quantity}</span>
+                </div>
+                <div class="receipt-item">
+                    <span>Paiement:</span>
+                    <span>${sale.paymentMethod}</span>
+                </div>
+                <div class="receipt-total">
+                    <span>TOTAL:</span>
+                    <span>${sale.amount.toLocaleString()} CDF</span>
+                </div>
+                <div class="receipt-item">
+                    <span>En USD:</span>
+                    <span>$${usdAmount}</span>
+                </div>
+                <div class="receipt-footer">
+                    <p>Merci pour votre achat !</p>
+                    <p>© 2026 Double King Shop</p>
+                </div>
+            `;
+        }
+
+        function viewReceipt(saleId) {
+            const sale = sales.find(s => s.id === saleId);
+            if (sale) {
+                generateReceipt(sale);
+                openModal('receiptModal');
+            }
+        }
+
+        function printReceipt() {
+            const receiptContent = document.getElementById('receiptContent').innerHTML;
+            const printWindow = window.open('', '', 'width=400,height=600');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Reçu - Double King Shop</title>
+                        <style>
+                            body { font-family: monospace; padding: 20px; }
+                            .receipt { border: 2px dashed #333; padding: 20px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="receipt">${receiptContent}</div>
+                        <script>window.print();<\/script>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // ==================== EXCHANGE RATE ====================
+        function updateExchangeRate(event) {
+            event.preventDefault();
+            exchangeRate = parseInt(document.getElementById('newExchangeRate').value);
+            localStorage.setItem('dk_exchange_rate', exchangeRate);
+            document.getElementById('exchangeRate').textContent = `1 USD = ${exchangeRate.toLocaleString()} CDF`;
+            closeModal('exchangeModal');
+            showNotification('✅ Taux de change mis à jour', 'success');
+        }
+
+        // ==================== UTILITIES ====================
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('dk_products', JSON.stringify(products));
+            localStorage.setItem('dk_users', JSON.stringify(users));
+            localStorage.setItem('dk_sales', JSON.stringify(sales));
+            localStorage.setItem('dk_exchange_rate', exchangeRate);
+        }
+
+        function loadFromStorage() {
+            const savedRate = localStorage.getItem('dk_exchange_rate');
+            if (savedRate) {
+                exchangeRate = parseInt(savedRate);
+                document.getElementById('exchangeRate').textContent = `1 USD = ${exchangeRate.toLocaleString()} CDF`;
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification show ' + type;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

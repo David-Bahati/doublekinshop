@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System - Double King</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .login-container { max-width: 400px; margin: 100px auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .login-container h1 { text-align: center; margin-bottom: 1.5rem; color: #667eea; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333; }
+        .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
+        .login-btn { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; margin-top: 1rem; }
+        .demo-info { background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-top: 1rem; font-size: 0.9rem; }
+        .dashboard { display: none; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { display: flex; align-items: center; gap: 0.5rem; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .stat-label { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #667eea; }
+        .section { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .section h2 { margin-bottom: 1rem; color: #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #667eea; color: white; }
+        tr:hover { background: #f8f9fa; }
+        .badge { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        .badge-pi { background: #f5576c; color: white; }
+        .badge-cdf { background: #2ecc71; color: white; }
+        .back-link { display: inline-block; margin-bottom: 1rem; color: #667eea; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .pi-info { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <!-- Login -->
+    <div class="login-container" id="login-form">
+        <h1>👑 Double King POS</h1>
+        <div class="form-group">
+            <label>Nom d'utilisateur</label>
+            <input type="text" id="username" placeholder="Entrez votre username">
+        </div>
+        <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" id="password" placeholder="Entrez votre mot de passe">        </div>
+        <button class="login-btn" onclick="login()">Se connecter</button>
+        <div class="demo-info">
+            <strong>Comptes démo:</strong><br>
+            Admin: admin / admin123<br>
+            Vendeur: vendeur / vendeur123<br>
+            Caissier: caissier / caissier123
+        </div>
+        <a href="index.html" class="back-link">← Retour à la boutique</a>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header class="header">
+            <h1>👑 Double King POS</h1>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </header>
+
+        <div class="container">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Revenus Totaux</div>
+                    <div class="stat-value" id="total-revenue">0 CDF</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ventes Totales</div>
+                    <div class="stat-value" id="total-sales">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Paiements Pi</div>
+                    <div class="stat-value" id="pi-payments">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Produits</div>
+                    <div class="stat-value">4</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Ventes Récentes</h2>
+                <div class="pi-info">
+                    <strong>💎 Paiements Pi:</strong> Les commandes payées en Pi sont affichées ci-dessous avec leur ID de transaction.
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Client</th>
+                            <th>Produit</th>
+                            <th>Montant</th>                            <th>Paiement</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #999;">Aucune vente encore</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Utilisateurs
+        const users = {
+            'admin': 'admin123',
+            'vendeur': 'vendeur123',
+            'caissier': 'caissier123'
+        };
+
+        const PI_PRICE = 5000; // 1 Pi = 5000 CDF
+
+        // Login
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username] === password) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadSales();
+            } else {
+                alert('Identifiants incorrects!');
+            }
+        }
+
+        // Logout
+        function logout() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Charger les ventes
+        function loadSales() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                        let totalRevenue = 0;
+            let totalSales = orders.length;
+            let piPayments = 0;
+            
+            const tbody = document.getElementById('sales-table');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">Aucune vente encore</td></tr>';
+            } else {
+                tbody.innerHTML = orders.slice().reverse().map(order => {
+                    totalRevenue += order.total;
+                    
+                    const isPiPayment = order.paymentMethod === 'Pi';
+                    if (isPiPayment) {
+                        piPayments++;
+                    }
+                    
+                    const products = order.items.map(item => item.name).join(', ');
+                    const date = new Date(order.date).toLocaleString('fr-FR');
+                    
+                    return `
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.customer.name}<br><small>${order.customer.phone}</small></td>
+                            <td>${products}</td>
+                            <td>${order.total.toLocaleString()} CDF</td>
+                            <td>
+                                ${isPiPayment ? 
+                                    `<span class="badge badge-pi">💎 Pi<br><small>${(order.total/PI_PRICE).toFixed(2)} Pi</small></span>` : 
+                                    `<span class="badge badge-cdf">CDF</span>`
+                                }
+                            </td>
+                            <td>${date}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('total-revenue').textContent = totalRevenue.toLocaleString() + ' CDF';
+            document.getElementById('total-sales').textContent = totalSales;
+            document.getElementById('pi-payments').textContent = piPayments;
+        }
+
+        // Rafraîchir toutes les 5 secondes
+        setInterval(loadSales, 5000);
+    </script>
+</body>
+</html>

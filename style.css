@@ -342,3 +342,130 @@ body {
     background-color: #e69500; /* Effet de clic */
 }
 
+/* ==========================================
+   DESIGN PRO - DASHBOARD DOUBLE KING SHOP
+   ========================================== */
+
+/* 1. Reset de base pour un affichage propre */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; /* Une police moderne */
+}
+
+/* 2. Style global (Mode Sombre, comme Zite) */
+body {
+    background-color: #1a202c; /* Bleu très foncé pour le fond */
+    color: #e2e8f0; /* Texte gris très clair */
+    padding: 20px;
+}
+
+/* 3. Le Container principal */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 4. En-tête du Dashboard */
+.dashboard-header {
+    margin-bottom: 30px;
+    padding: 15px 0;
+}
+.dashboard-header h1 {
+    font-size: 24px;
+    color: #fff;
+    font-weight: 700;
+}
+.dashboard-header p {
+    color: #a0aec0; /* Texte gris moyen */
+    font-size: 14px;
+}
+
+/* 5. Grille Responsive (s'adapte aux écrans mobiles) */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Cartes s'empilent sur mobile */
+    gap: 20px; /* Espace entre les cartes */
+}
+
+/* 6. Style générique des Cartes (Même look que Zite) */
+.stat-card {
+    background-color: #2d3748; /* Gris-bleu foncé pour les cartes */
+    border-radius: 15px; /* Bordures arrondies premium */
+    padding: 20px;
+    display: flex;
+    align-items: center; /* Centre verticalement */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    transition: transform 0.2s ease; /* Petit effet au survol */
+}
+.stat-card:hover {
+    transform: translateY(-5px); /* Carte se lève légèrement */
+}
+
+/* 7. Icônes des cartes */
+.card-icon {
+    font-size: 28px;
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Couleurs spécifiques des icônes (Comme sur votre modèle) */
+.revenue .card-icon {
+    color: #48bb78; /* Vert pour l'argent */
+    background-color: rgba(72, 187, 120, 0.1); /* Fond vert transparent */
+}
+.today .card-icon {
+    color: #4299e1; /* Bleu pour l'activité du jour */
+    background-color: rgba(66, 153, 225, 0.1);
+}
+.total-sales .card-icon {
+    color: #9f7aea; /* Violet pour l'historique */
+    background-color: rgba(159, 122, 234, 0.1);
+}
+.products .card-icon {
+    color: #f6ad55; /* Orange pour les produits */
+    background-color: rgba(246, 173, 85, 0.1);
+}
+
+/* 8. Textes dans les cartes */
+.card-info {
+    flex: 1; /* Prend tout l'espace restant */
+}
+.card-info h3 {
+    font-size: 14px;
+    color: #a0aec0;
+    text-transform: uppercase; /* Tout en majuscules, comme Zite */
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+.stat-number {
+    font-size: 28px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.stat-change, .stat-detail {
+    font-size: 12px;
+    color: #a0aec0;
+}
+.stat-change.positive {
+    color: #48bb78; /* Vert pour une hausse */
+}
+.stat-change.negative {
+    color: #f56565; /* Rouge pour une baisse */
+}
+
+/* Icône Pi customisé (juste pour le look, pas fonctionnel sans le Pi SDK activé) */
+.fa-pi {
+    color: #623686; /* Couleur violette Pi Network */
+}
+
+/* ==========================================
+   RÉSULTAT : UN DASHBOARD PRO POUR DKS 👑
+   ========================================== */

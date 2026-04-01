@@ -13,6 +13,8 @@ async function connecterAvecPi() {
         // On stocke le nom de l'utilisateur Pi
         localStorage.setItem('pi_user', auth.user.username);
         
+        let historiqueVentes = JSON.parse(localStorage.getItem('dks_historique')) || [];
+
         // Mise à jour de l'interface (ex: afficher son nom dans la navbar)
         alert("Connecté avec succès en tant que : " + auth.user.username);
         
@@ -74,6 +76,8 @@ function calculerTotal() {
 }
 
 // On utilise bien le nom que TU as dans ton code : validerVente
+// À ajouter dans votre fonction validerVente() existante :
+
 function validerVente() {
     if (panier.length === 0) {
         alert("Votre panier est vide ! Ajoutez des articles avant de valider la vente.");
@@ -89,9 +93,35 @@ function validerVente() {
     // Confirmation de la transaction
     const confirmation = confirm(`Confirmer la vente de ${totalVente} Pi pour ${panier.length} article(s) ?`);
 
-    if (confirmation) {
-        // C'est ici qu'on intègrera plus tard le Pi.createPayment()
-        alert(`✅ Vente validée avec succès chez Double King !\nTotal : ${totalVente} Pi`);
+        if (confirmation) {
+        // 1. On crée l'objet de la vente
+        const nouvelleVente = {
+            date: new Date().toLocaleString(),
+            total: totalVente,
+            articles: panier.map(i => i.nom).join(", ")
+        };
+
+        // 2. On l'ajoute à l'historique (très important pour l'admin !)
+        if (typeof historiqueVentes === 'undefined') {
+            historiqueVentes = JSON.parse(localStorage.getItem('dks_historique')) || [];
+        }
+        historiqueVentes.push(nouvelleVente);
+
+        // 3. On SAUVEGARDE dans le téléphone
+        localStorage.setItem('dks_historique', JSON.stringify(historiqueVentes));
+
+        alert(`✅ Vente validée !\nTotal : ${totalVente} Pi`);
+
+        // 4. On vide le panier et on ferme
+        panier = [];
+        mettreAJourBadgePanier();
+        fermerPanier();
+        
+        // 5. ON FORCE LA MISE À JOUR DU DASHBOARD
+        if (typeof calculerStatistiquesAdmin === 'function') {
+            calculerStatistiquesAdmin();
+        }
+    }
 
         // On vide le panier après la vente
         panier = [];
@@ -103,7 +133,6 @@ function validerVente() {
         
         console.log("Vente enregistrée dans le système.");
     }
-}
 
 
 // ==========================================
@@ -441,7 +470,7 @@ grid.innerHTML += `
         </button>
     </div>
 `;
-let historiqueVentes = []; // Tableau pour stocker les ventes réussies
+let historiqueVentes = JSON.parse(localStorage.getItem('dks_historique')) || []; // Tableau pour stocker les ventes réussies
 
 function validerVente() {
     if (panier.length === 0) return;
@@ -611,6 +640,149 @@ function chargerTousLesProduits() {
 
     // Utilise maintenant 'catalogueComplet' pour afficher tes cartes sur l'accueil
     afficherProduits(catalogueComplet);
+}
+
+
+
+// ==========================================
+// MISE À JOUR DU DASHBOARD (CORRIGÉ POUR TON CODE)
+// ==========================================
+function calculerStatistiquesAdmin() {
+    // 1. Calcul du Revenu (Somme des 'total' dans ton tableau 'ventes')
+    let revenuTotal = 0;
+    ventes.forEach(v => {
+        // On s'assure que v.total est un nombre
+        revenuTotal += parseFloat(v.total) || 0;
+    });
+
+    // 2. Calcul des Produits et Alertes
+    const nbProduits = articles.length;
+    // On filtre les articles dont le stock est < 5
+    const alertes = articles.filter(item => item.stock < 5).length;
+
+    // 3. Injection dans ton HTML (Vérifie bien que ces IDs sont dans ton fichier .html)
+    if(document.getElementById('stat-revenu')) {
+        document.getElementById('stat-revenu').innerText = revenuTotal + " Pi";
+    }
+    
+    if(document.getElementById('stat-nb-ventes')) {
+        document.getElementById('stat-nb-ventes').innerText = ventes.length;
+    }
+
+    if(document.getElementById('stat-ventes-jour')) {
+        document.getElementById('stat-ventes-jour').innerText = ventes.length; 
+    }
+
+    if(document.getElementById('stat-total-produits')) {
+        document.getElementById('stat-total-produits').innerText = nbProduits;
+    }
+
+    if(document.getElementById('alertes-stock-nb')) {
+        document.getElementById('alertes-stock-nb').innerText = alertes;
+    }
+}
+window.onload = function() {
+    preparerCaissier();
+    afficherInventaireAdmin();
+    afficherHistorique();
+    afficherProduitsAccueil();
+    
+    // ON AJOUTE CELA ICI POUR TON DASHBOARD
+    calculerStatistiquesAdmin(); 
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Le DOM est chargé !");
+    
+    // On lance toutes les fonctions de base
+    if (typeof preparerCaissier === 'function') preparerCaissier();
+    if (typeof afficherInventaireAdmin === 'function') afficherInventaireAdmin();
+    
+    // On force un petit délai de 500ms pour être SÛR que le HTML est là
+    setTimeout(() => {
+        console.log("Mise à jour forcée des statistiques...");
+        // On lance la simulation pour voir si ça débloque
+        if (typeof simulerDonneesTest === 'function') {
+            simulerDonneesTest();
+        } else {
+            calculerStatistiquesAdmin();
+        }
+    }, 500);
+});
+
+// ==========================================
+// FONCTION DE TEST (SIMULATION DE VENTES)
+// ==========================================
+function simulerDonneesTest() {
+    console.log("🛠️ Simulation de données pour Double King Shop...");
+
+    // 1. On ajoute quelques ventes de test si le tableau est vide
+    if (ventes.length === 0) {
+        ventes = [
+            { date: "30/03/2026", article: "Souris Sans Fil", quantite: 2, total: 20 },
+            { date: "30/03/2026", article: "Clavier AZERTY", quantite: 1, total: 25 },
+            { date: "30/03/2026", article: "Câble USB-C", quantite: 3, total: 15 }
+        ];
+        // On sauvegarde dans le stockage du téléphone
+        localStorage.setItem('dks_ventes', JSON.stringify(ventes));
+    }
+
+    // 2. On s'assure qu'il y a des articles pour les stats
+    if (articles.length <= 3) {
+        articles.push({ id: 4, nom: "Écran 24 pouces", prix: 150, stock: 2, categorie: "Moniteurs" });
+        articles.push({ id: 5, nom: "Clé USB 64Go", prix: 12, stock: 4, categorie: "Stockage" });
+    }
+
+    // 3. On relance le calcul pour mettre à jour l'affichage
+    calculerStatistiquesAdmin();
+    
+    console.log("✅ Simulation terminée. Regarde ton Dashboard !");
+}
+
+// APPEL DE LA SIMULATION (À retirer une fois que tu as fini tes tests)
+// simulerDonneesTest(); 
+// ==========================================
+// 5. CALCULS DU DASHBOARD ADMIN
+// ==========================================
+
+function calculerStatistiquesAdmin() {
+    console.log("Calcul des statistiques en cours...");
+
+    // 1. Récupérer les articles (on utilise 'articles' qui est déjà dans votre code)
+    const totalProduits = articles.length;
+    
+    // 2. Calculer le nombre d'alertes stock (ex: stock inférieur à 5)
+    const alertesStock = articles.filter(item => item.stock < 5).length;
+
+    // 3. Récupérer les ventes (on utilise 'historiqueVentes' ou 'ventes' de votre code)
+    // Note: 'historiqueVentes' est le tableau que vous remplissez lors des validations
+    const nbVentes = historiqueVentes.length;
+
+    // 4. Calculer le revenu total en Pi
+    let revenuTotal = 0;
+    historiqueVentes.forEach(v => {
+        revenuTotal += parseFloat(v.total || 0);
+    });
+
+    // 5. Injection des données dans le HTML de admin.html
+    if (document.getElementById('stat-revenu')) {
+        document.getElementById('stat-revenu').innerText = revenuTotal.toFixed(2) + " Pi";
+    }
+    if (document.getElementById('stat-nb-ventes')) {
+        document.getElementById('stat-nb-ventes').innerText = nbVentes;
+    }
+    if (document.getElementById('stat-ventes-jour')) {
+        // Pour l'instant, on met le total global ou 0 si pas de vente aujourd'hui
+        document.getElementById('stat-ventes-jour').innerText = nbVentes; 
+    }
+    if (document.getElementById('stat-total-produits')) {
+        document.getElementById('stat-total-produits').innerText = totalProduits;
+    }
+    if (document.getElementById('alertes-stock-nb')) {
+        document.getElementById('alertes-stock-nb').innerText = alertesStock;
+    }
+
+    console.log("Stats mises à jour : ", {revenuTotal, nbVentes, totalProduits});
 }
 
 
